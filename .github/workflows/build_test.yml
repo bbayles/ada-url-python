@@ -21,7 +21,7 @@ jobs:
   build_test:
     strategy:
       matrix:
-        os: ["ubuntu-20.04", "macos-latest"]
+        os: ["ubuntu-20.04", "macos-11"]
         python: ["3.8", "3.9", "3.10", "3.11"]
 
     runs-on: ${{ matrix.os }}
@@ -35,14 +35,27 @@ jobs:
     - name: Install dependencies
       run: |
         make requirements
-    - name: Build packages
+    - name: Build packages for Linux
+      if: "matrix.os == 'ubuntu-20.04'"
       run: |
         make package
-    - name: Repair wheels
+    - name: Repair wheels for Linux
       if: "matrix.os == 'ubuntu-20.04'"
       run: |
         pip install -U auditwheel patchelf
-        auditwheel repair --plat manylinux_2_24_x86_64 --wheel-dir dist dist/ada_url-*linux*.whl
+    - name: Build packages for macOS
+      if: "matrix.os == 'macos-11'"
+      run: |
+        make package
+      env:
+        MACOSX_DEPLOYMENT_TARGET: 10.9
+    - name: Repair wheels for macOS
+      if: "matrix.os == 'macos-11'"
+      run: |
+        pip install -U delocate
+        delocate-wheel dist/ada_url-*macos*.whl
+      env:
+        MACOSX_DEPLOYMENT_TARGET: 10.9
     - name: Run tests
       run: |
         pip install -e .
