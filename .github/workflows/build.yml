@@ -19,29 +19,19 @@ concurrency:
   cancel-in-progress: true
   
 jobs:
-  build_test:
+  build_wheels:
     strategy:
       matrix:
         os: ["ubuntu-20.04", "macos-11"]
-        python: ["cp38", "cp39", "cp310", "cp311", "pp38", "pp39"]
 
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.8"
     - name: Install dependencies
       run: |
         make requirements c_lib
     - name: Build wheels
       uses: pypa/cibuildwheel@v2.12.3
-      env:
-        CIBW_ARCHS_LINUX: x86_64 aarch64
-        CIBW_ARCHS_MACOS: x86_64 arm64 universal2
-        CIBW_BUILD: "${{ matrix.python }}-*"
     - name: Upload packages
       uses: actions/upload-artifact@v3
       with:

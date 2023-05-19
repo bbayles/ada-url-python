@@ -15,3 +15,20 @@ exclude = [
     ".git",
     ".ruff_cache",
 ]
+
+[tool.cibuildwheel]
+before-build = "make requirements c_lib"
+build = [
+    "cp38-*",
+    "cp39-*",
+    "cp310-*",
+    "cp311-*",
+    "pp38-*",
+    "pp39-*",
+]
+
+[tool.cibuildwheel.linux]
+archs = ["x86_64"]
+
+[tool.cibuildwheel.macos]
+archs = ["x86_64", "universal2", "arm64"]
