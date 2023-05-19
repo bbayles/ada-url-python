@@ -42,7 +42,7 @@ jobs:
         make c_lib
         python -m cibuildwheel --output-dir wheelhouse
         env:
-          CIBW_ARCHS_LINUX: auto aarch64
+          CIBW_ARCHS_LINUX: x86_64 aarch64
           CIBW_ARCHS_MACOS: x86_64 arm64 universal2
           CIBW_BUILD: "${{ matrix.python }}-*"
     - name: Upload packages
