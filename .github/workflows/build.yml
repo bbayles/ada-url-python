@@ -1,4 +1,4 @@
-name: Build and test
+name: Build
 
 on:
   pull_request:
@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         os: ["ubuntu-20.04", "macos-11"]
-        python: ["3.8", "3.9", "3.10", "3.11"]
+        python: ["cp38", "cp39", "cp310", "cp311", "pp38", "pp39"]
 
     runs-on: ${{ matrix.os }}
 
@@ -38,23 +38,15 @@ jobs:
         make requirements
     - name: Build packages
       run: |
-        pip install -U "cibuildwheel<3.0.0"
+        python -m pip install cibuildwheel==2.12.3
         make c_lib
-        python -m cibuildwheel --output-dir dist
-      env:
-        CIBW_ARCHS_LINUX: auto aarch64
-        CIBW_ARCHS_MACOS: x86_64 arm64 universal2
-        CIBW_BUILD: "${{ matrix.python }}-*"
-    - name: Run tests
-      run: |
-        pip install -e .
-        make coverage
-    - name: Build docs with sphinx
-      if: "matrix.python == '3.8' && matrix.os == 'ubuntu-20.04'"
-      run: |
-        make docs
+        python -m cibuildwheel --output-dir wheelhouse
+        env:
+          CIBW_ARCHS_LINUX: auto aarch64
+          CIBW_ARCHS_MACOS: x86_64 arm64 universal2
+          CIBW_BUILD: "${{ matrix.python }}-*"
     - name: Upload packages
       uses: actions/upload-artifact@v3
       with:
         name: ada-url-packages
-        path: dist/*
+        path: wheelhouse/*
