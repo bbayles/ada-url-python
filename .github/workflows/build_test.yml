@@ -41,6 +41,10 @@ jobs:
         pip install -U "cibuildwheel<3.0.0"
         make c_lib
         python -m cibuildwheel --output-dir dist
+      env:
+        CIBW_ARCHS_LINUX: auto aarch64
+        CIBW_ARCHS_MACOS: x86_64 arm64 universal2
+        CIBW_BUILD: "${{ matrix.py }}-*"
     - name: Run tests
       run: |
         pip install -e .
