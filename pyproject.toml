@@ -17,7 +17,9 @@ exclude = [
 ]
 
 [tool.cibuildwheel]
-before-build = "make requirements c_lib"
+before-build = [
+    "make requirements c_lib"
+]
 build = [
     "cp38-*",
     "cp39-*",
