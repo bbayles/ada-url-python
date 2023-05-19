@@ -41,10 +41,10 @@ jobs:
         python -m pip install cibuildwheel==2.12.3
         make c_lib
         python -m cibuildwheel --output-dir wheelhouse
-        env:
-          CIBW_ARCHS_LINUX: x86_64 aarch64
-          CIBW_ARCHS_MACOS: x86_64 arm64 universal2
-          CIBW_BUILD: "${{ matrix.python }}-*"
+      env:
+        CIBW_ARCHS_LINUX: x86_64 aarch64
+        CIBW_ARCHS_MACOS: x86_64 arm64 universal2
+        CIBW_BUILD: "${{ matrix.python }}-*"
     - name: Upload packages
       uses: actions/upload-artifact@v3
       with:
