@@ -34,9 +34,6 @@ jobs:
     - name: Install dependencies
       run: |
         make requirements
-    - name: Build packages
-      run: |
-        make package
     - name: Run tests
       run: |
         pip install -e .
