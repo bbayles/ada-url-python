@@ -1,7 +1,7 @@
 from os.path import dirname, join
 from shlex import split
 from sys import platform
-from sysconfig import get_config_var
+from sysconfig import get_config_var, get_config_vars
 from subprocess import check_call
 
 from cffi import FFI
@@ -17,6 +17,7 @@ class AdaFFIBuilder(FFI):
         super().__init__(*args, **kwargs)
 
     def build_ada_cpp(self):
+        print(get_config_vars())
         check_call(
             [
                 split(get_config_var('CXX'))[0],
