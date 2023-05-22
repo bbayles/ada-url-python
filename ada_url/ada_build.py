@@ -1,4 +1,5 @@
 from os.path import dirname, join
+from shlex import split
 from sys import platform
 from sysconfig import get_config_var
 from subprocess import check_call
@@ -18,7 +19,7 @@ class AdaFFIBuilder(FFI):
     def build_ada_cpp(self):
         check_call(
             [
-                get_config_var('CXX'),
+                split(get_config_var('CXX'))[0],
                 '-c',
                 join(file_dir, 'ada.cpp'),
                 '-fPIC',
